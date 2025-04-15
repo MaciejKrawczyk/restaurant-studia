@@ -9,3 +9,7 @@ DATABASE_URL="file:./dev.db"
 3. ```npm run prisma```
 
 4. ```npm run dev```
+
+![1.png](demo/1.png)
+![2.png](demo/2.png)
+![3.png](demo/3.png)
