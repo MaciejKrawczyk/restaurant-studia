@@ -19,8 +19,6 @@ export const addToCart = async (req: Request, res: Response) => {
                 cartCount
             });
         }
-
-        res.redirect('back');
     } catch (error) {
         console.error(error);
 
