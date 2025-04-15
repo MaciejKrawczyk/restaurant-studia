@@ -1,0 +1,77 @@
+extends layouts/main
+
+block content
+    .row
+        .col-md-8
+            h1= restaurant.name
+            .row
+                each dish in restaurant.menu.dishes
+                    .col-md-6.mb-4
+                        .card.dish-card
+                            .card-body
+                                .d-flex.justify-content-between
+                                    h5.card-title= dish.name
+                                    h6 $#{dish.price}
+                                p.card-text
+                                    small.text-muted #{dish.timeToPrepare} mins
+                                h6 Ingredients:
+                                ul
+                                    each ingredient in dish.ingredients
+                                        li= ingredient.name
+                                form(method="POST", action="/cart/add")
+                                    input(type="hidden", name="dishId", value=dish.id)
+                                    input(type="hidden", name="restaurantId", value=restaurant.id)
+                                    button.btn.btn-primary.btn-sm(
+                                        type="button",
+                                        onclick=`addToCart(${dish.id}, ${restaurant.id})`
+                                    ) Add to Cart
+        .col-md-4
+            .card.sticky-top(style="top: 20px")
+                .card-body
+                    h5.card-text Delivery Info
+                    p
+                        i.fas.fa-map-marker-alt.me-2
+                        | #{restaurant.latitude}, #{restaurant.longitude}
+                    a.btn.btn-success.w-100(href="/cart") View Cart (#{cart ? cart.length : 0})
+
+                    script.
+                        function addToCart(dishId, restaurantId) {
+                            // Disable button during request
+                            const btn = event.target;
+                            btn.disabled = true;
+                            btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...';
+
+                            fetch('/cart/add', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({dishId, restaurantId})
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        // Update cart counter
+                                        const cartCounter = document.getElementById('cartCounter');
+                                        if (cartCounter) {
+                                            cartCounter.textContent = data.cartCount;
+                                        }
+                                        showToast('Item added to cart!');
+                                    } else {
+                                        showToast('Error adding to cart: ' + data.message, 'danger');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    showToast('Error adding to cart', 'danger');
+                                })
+                                .finally(() => {
+                                    // Re-enable button
+                                    btn.disabled = false;
+                                    btn.innerHTML = 'Add to Cart';
+                                });
+                        }
+
+                        function showToast(message, type = 'success') {
+                            // Your existing toast implementation
+                        }

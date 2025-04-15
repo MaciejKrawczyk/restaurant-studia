@@ -1,8 +1,12 @@
 import { Router } from 'express';
-import * as homeController from '../controllers/home.controller';
+import { getHome } from '../controllers/home.controller';
+import restaurantRoutes from './restaurant.routes';
+import cartRoutes from './cart.routes';
 
 const router = Router();
 
-router.get('/', homeController.getHomePage);
+router.get('/', getHome);
+router.use('/restaurant', restaurantRoutes);
+router.use('/cart', cartRoutes);
 
 export default router;

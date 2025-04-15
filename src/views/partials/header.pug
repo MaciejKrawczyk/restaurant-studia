@@ -1,0 +1,16 @@
+header
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+        .container
+            a.navbar-brand(href="/") FoodExpress
+            button.navbar-toggler(type="button", data-bs-toggle="collapse", data-bs-target="#navbarNav")
+                span.navbar-toggler-icon
+            .collapse.navbar-collapse#navbarNav
+                ul.navbar-nav.me-auto
+                    li.nav-item
+                        a.nav-link(href="/") Home
+                ul.navbar-nav
+                    li.nav-item
+                        a.nav-link(href="/cart")
+                            i.fas.fa-shopping-cart.me-1
+                            | Cart
+                            span#cartCounter.badge.bg-danger= cart ? cart.reduce((sum, item) => sum + item.quantity, 0) : 0

@@ -1,0 +1,12 @@
+extends layouts/main
+
+block content
+    h1.mb-4 Restaurants Near You
+    .row
+        each restaurant, index in restaurants
+            .col-md-4.mb-4
+                .card.restaurant-card
+                    img.card-img-top(src=`/${index + 1}.jpg`, alt=restaurant.name)
+                    .card-body
+                        h5.card-title= restaurant.name
+                        a.btn.btn-primary(href=`/restaurant/${restaurant.id}`) View Menu

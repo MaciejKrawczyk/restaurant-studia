@@ -1,0 +1,47 @@
+extends layouts/main
+
+block content
+    h1.mb-4 Your Cart
+    if cart.length === 0
+        .alert.alert-info Your cart is empty
+    else
+        .row
+            .col-md-8
+                each item in cart
+                    .card.mb-3
+                        .card-body
+                            .d-flex.justify-content-between
+                                h5.card-title= item.name
+                                .text-end
+                                    p.card-text $#{item.price * item.quantity}
+                                        small (#{item.quantity} x $#{item.price})
+                            form(method="POST", action="/cart/update")
+                                input(type="hidden", name="dishId", value=item.dishId)
+                                input(type="hidden", name="restaurantId", value=item.restaurantId)
+                                .input-group.mb-3(style="width: 150px")
+                                    input.form-control(
+                                        type="number",
+                                        name="quantity",
+                                        value=item.quantity,
+                                        min="1"
+                                    )
+                                    button.btn.btn-outline-secondary(type="submit") Update
+                            form(method="POST", action="/cart/remove")
+                                input(type="hidden", name="dishId", value=item.dishId)
+                                input(type="hidden", name="restaurantId", value=item.restaurantId)
+                                button.btn.btn-outline-danger.btn-sm(type="submit") Remove
+            .col-md-4
+                .card
+                    .card-body
+                        h5.card-title Order Summary
+                        each item in cart
+                            .d-flex.justify-content-between.mb-2
+                                span #{item.quantity}x #{item.name}
+                                span $#{item.price * item.quantity}
+                        hr
+                        .d-flex.justify-content-between
+                            strong Total:
+                            strong $#{cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)}
+                        a.btn.btn-success.w-100.mt-3(href="/checkout") Proceed to Checkout
+                        form(method="POST", action="/cart/clear")
+                            button.btn.btn-outline-secondary.w-100.mt-2(type="submit") Clear Cart

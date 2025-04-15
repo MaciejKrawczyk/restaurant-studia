@@ -18,12 +18,13 @@ model User {
 }
 
 model Restaurant {
-  id        Int    @id @default(autoincrement())
+  id        Int         @id @default(autoincrement())
   name      String
   latitude  Float
   longitude Float
   menuId    Int
-  menu      Menu   @relation(fields: [menuId], references: [id])
+  menu      Menu        @relation(fields: [menuId], references: [id])
+  OrderItem OrderItem[]
 }
 
 model Menu {
@@ -36,12 +37,31 @@ model Dish {
   id            Int          @id @default(autoincrement())
   name          String
   timeToPrepare Int
+  price         Float
   menus         Menu[]       @relation("MenuDishes")
   ingredients   Ingredient[] @relation("DishIngredients")
+  OrderItem     OrderItem[]
 }
 
 model Ingredient {
   id     Int    @id @default(autoincrement())
   name   String @unique
   dishes Dish[] @relation("DishIngredients")
+}
+
+model Order {
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  items     OrderItem[]
+}
+
+model OrderItem {
+  id           Int        @id @default(autoincrement())
+  order        Order      @relation(fields: [orderId], references: [id])
+  orderId      Int
+  dish         Dish       @relation(fields: [dishId], references: [id])
+  dishId       Int
+  quantity     Int        @default(1)
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurantId Int
 }
