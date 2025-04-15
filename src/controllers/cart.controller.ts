@@ -6,7 +6,6 @@ export const getCart = (req: Request, res: Response) => {
     res.render('cart', { cart });
 };
 
-// src/controllers/cart.controller.ts
 export const addToCart = async (req: Request, res: Response) => {
     try {
         const { dishId, restaurantId } = req.body;
@@ -15,7 +14,7 @@ export const addToCart = async (req: Request, res: Response) => {
         const cartCount = req.session.cart?.reduce((sum, item) => sum + item.quantity, 0) || 0;
 
         if (req.accepts('json')) {
-            return res.json({
+            res.json({
                 success: true,
                 cartCount
             });
@@ -26,7 +25,7 @@ export const addToCart = async (req: Request, res: Response) => {
         console.error(error);
 
         if (req.accepts('json')) {
-            return res.status(500).json({
+            res.status(500).json({
                 success: false,
                 message: 'Error adding to cart'
             });

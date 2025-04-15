@@ -34,7 +34,10 @@ app.use('/', routes);
 
 // Error handling
 app.use((req, res) => {
-    res.status(404).render('404');
+    res.status(404).render('404', {
+        title: 'Page Not Found',
+        layout: 'layouts/main'
+    });
 });
 
 app.use((err: any, req: express.Request, res: express.Response) => {
@@ -42,13 +45,11 @@ app.use((err: any, req: express.Request, res: express.Response) => {
     res.status(500).send('Something broke!');
 });
 
-// Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
 
-// Prisma disconnect on shutdown
 process.on('SIGINT', async () => {
     await prisma.$disconnect();
     process.exit();

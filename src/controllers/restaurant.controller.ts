@@ -22,7 +22,7 @@ export const getRestaurant = async (req: Request, res: Response) => {
         });
 
         if (!restaurant) {
-            return res.status(404).send('Restaurant not found');
+            res.status(404).send('Restaurant not found');
         }
 
         res.render('restaurant', { restaurant });

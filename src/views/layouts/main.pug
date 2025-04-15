@@ -10,12 +10,15 @@ html(lang="en")
             .restaurant-card {
                 transition: transform 0.3s;
             }
+
             .restaurant-card:hover {
                 transform: scale(1.03);
             }
+
             .dish-card {
                 height: 100%;
             }
+
             .restaurant-card img {
                 width: 100%;
                 height: 200px;
@@ -35,6 +38,13 @@ html(lang="en")
             #cartCounter.updated {
                 transform: scale(1.3);
             }
+
+            .error-page {
+                min-height: 60vh;
+                display: flex;
+                align-items: center;
+            }
+
     body
         include ../partials/header
 

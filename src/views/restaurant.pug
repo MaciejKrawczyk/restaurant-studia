@@ -36,7 +36,6 @@ block content
 
                     script.
                         function addToCart(dishId, restaurantId) {
-                            // Disable button during request
                             const btn = event.target;
                             btn.disabled = true;
                             btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...';
@@ -51,27 +50,22 @@ block content
                                 .then(response => response.json())
                                 .then(data => {
                                     if (data.success) {
-                                        // Update cart counter
                                         const cartCounter = document.getElementById('cartCounter');
                                         if (cartCounter) {
                                             cartCounter.textContent = data.cartCount;
                                         }
-                                        showToast('Item added to cart!');
+                                        alert('Item added to cart!');
                                     } else {
-                                        showToast('Error adding to cart: ' + data.message, 'danger');
+                                        alert('Error adding to cart: ' + data.message);
                                     }
                                 })
                                 .catch(error => {
                                     console.error('Error:', error);
-                                    showToast('Error adding to cart', 'danger');
+                                    alert('Error adding to cart');
                                 })
                                 .finally(() => {
-                                    // Re-enable button
                                     btn.disabled = false;
                                     btn.innerHTML = 'Add to Cart';
                                 });
                         }
 
-                        function showToast(message, type = 'success') {
-                            // Your existing toast implementation
-                        }

@@ -1,14 +1,7 @@
-import { Request } from 'express';
+import {Request} from 'express';
 import prisma from "../../prisma/client";
+import {CartItem} from "../types";
 
-interface CartItem {
-    dishId: number;
-    restaurantId: number;
-    quantity: number;
-    name: string;
-    price: number;
-    timeToPrepare: number;
-}
 
 export class CartService {
     private getSessionCart(req: Request): CartItem[] {
@@ -21,12 +14,12 @@ export class CartService {
     async addToCart(req: Request, dishId: number, restaurantId: number) {
         const cart = this.getSessionCart(req);
         const dish = await prisma.dish.findUnique({
-            where: { id: dishId },
+            where: {id: dishId},
             select: {
                 id: true,
                 name: true,
                 timeToPrepare: true,
-                // Add price when you add it to the model
+                price: true,
             }
         });
 
