@@ -3,7 +3,8 @@ import { cartService } from '../services/cart.service';
 
 export const getCart = (req: Request, res: Response) => {
     const cart = cartService.getCart(req);
-    res.render('cart', { cart });
+    const userId = req.session.userId || null;
+    res.render('cart', { cart, userId });
 };
 
 export const addToCart = async (req: Request, res: Response) => {
