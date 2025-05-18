@@ -1,0 +1,96 @@
+extends layouts/main
+
+block content
+  h1.mb-4 Find Us
+  #map(style="width: 100%; height: 80vh;")
+
+  .modal.fade#confirmationModal(tabindex="-1", aria-labelledby="confirmationModalLabel", aria-hidden="true")
+    .modal-dialog
+      .modal-content
+        .modal-header
+          h5.modal-title#confirmationModalLabel Waiting for Confirmation
+        .modal-body
+          p Please wait while the restaurant confirms your order…
+          .d-flex.justify-content-center
+            .spinner-border(role="status")
+              span.visually-hidden Loading...
+        .modal-footer
+          button.btn.btn-secondary(type="button", data-bs-dismiss="modal") Close
+
+  .modal.fade#deliveryModal(tabindex="-1", aria-labelledby="deliveryModalLabel", aria-hidden="true")
+    .modal-dialog
+      .modal-content
+        .modal-header
+          h5.modal-title#deliveryModalLabel Order Confirmed!
+        .modal-body
+          p Your order has been confirmed and will be delivered in
+            strong#eta 30 minutes.
+        .modal-footer
+          button.btn.btn-primary(type="button", data-bs-dismiss="modal") OK
+
+block scripts
+  script.
+    (function() {
+      const MOCK_LAT = 50.029676;
+      const MOCK_LNG = 19.905191;
+
+      const waitModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+      waitModal.show();
+      setTimeout(() => {
+        waitModal.hide();
+        const etaMinutes = 20 + Math.floor(Math.random() * 26);
+        document.getElementById('eta').textContent = etaMinutes + ' minutes';
+        new bootstrap.Modal(document.getElementById('deliveryModal')).show();
+      }, 10000);
+
+      const restoLat = !{resto.lat}, restoLng = !{resto.lng};
+      const map = L.map('map').setView([restoLat, restoLng], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap'
+      }).addTo(map);
+      const restoIcon = L.divIcon({
+        html: '<i class="fa-solid fa-utensils fa-2x" style="color: orangered;"></i>',
+        iconSize: [24, 24],
+        className: ''
+      });
+      L.marker([restoLat, restoLng], { icon: restoIcon }).addTo(map);
+
+      function addUserAndRoute(lat, lng) {
+        const userPin = L.icon({
+          iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+          iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+          shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          shadowSize: [41, 41]
+        });
+        L.marker([lat, lng], { icon: userPin })
+          .addTo(map)
+          .bindPopup('You are here');
+        L.Routing.control({
+          waypoints: [
+            L.latLng(lat, lng),
+            L.latLng(restoLat, restoLng)
+          ],
+          lineOptions: { addWaypoints: false },
+          createMarker: () => null,
+          show: false
+        }).addTo(map);
+      }
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          ({ coords }) => {
+            addUserAndRoute(coords.latitude, coords.longitude);
+          },
+          err => {
+            console.warn('Geolocation failed:', err.message);
+            addUserAndRoute(MOCK_LAT, MOCK_LNG);
+          }
+        );
+      } else {
+        console.warn('Geolocation not supported');
+        addUserAndRoute(MOCK_LAT, MOCK_LNG);
+      }
+    })();

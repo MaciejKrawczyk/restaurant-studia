@@ -2,8 +2,14 @@ extends layouts/main
 
 block content
   h1 Payment Successful 🎉
-  p Your transaction ID is
+  p Transaction ID:
     strong= transactionId
   p Amount paid:
     strong $#{amount}
-  a.btn.btn-primary.mt-3(href="/") Track your order
+
+  if restaurantId
+    a.btn.btn-primary.mt-3(
+      href=`/map?restaurantId=${restaurantId}`
+    ) Track your order
+  else
+    p.text-muted No restaurant to show.
