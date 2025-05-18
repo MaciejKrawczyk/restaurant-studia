@@ -11,7 +11,7 @@ app.use(session({
     secret: 'your-secret-key',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: process.env.NODE_ENV === 'production' }
+    cookie: {secure: process.env.NODE_ENV === 'production'}
 }));
 
 // View engine setup
@@ -21,7 +21,7 @@ app.set('view engine', 'pug');
 // Middleware
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: false}));
 
 // Make cart available to all views
 app.use((req, res, next) => {

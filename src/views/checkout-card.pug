@@ -1,0 +1,40 @@
+extends layouts/main
+
+block content
+  h1.mb-4 Płatność kartą
+  form(method="POST", action="/checkout/complete")
+    input(type="hidden" name="method" value="card")
+
+    .mb-3
+      label(for="cardNumber") Numer karty
+      input#cardNumber.form-control(
+        type="text" name="cardNumber" required
+        value=(cardNumber || '')
+      )
+      if error
+        .form-text.text-danger= error
+
+    .mb-3
+      label(for="cardName") Imię i nazwisko
+      input#cardName.form-control(
+        type="text" name="cardName" required
+        value=(cardName || '')
+      )
+
+    .row
+      .col
+        .mb-3
+          label(for="cardExp") Ważność (MM/YY)
+          input#cardExp.form-control(
+            type="text" name="cardExp" required
+            value=(cardExp || '')
+          )
+      .col
+        .mb-3
+          label(for="cardCvc") CVC
+          input#cardCvc.form-control(
+            type="text" name="cardCvc" required
+            value=(cardCvc || '')
+          )
+
+    button.btn.btn-success(type="submit") Pay $#{total}

@@ -4,6 +4,7 @@ import restaurantRoutes from './restaurant.routes';
 import cartRoutes from './cart.routes';
 import registerRoutes from "./register.routes";
 import loginRoutes from "./login.routes";
+import checkoutRoutes from "./checkout.routes";
 
 const router = Router();
 
@@ -12,5 +13,6 @@ router.use('/restaurant', restaurantRoutes);
 router.use('/cart', cartRoutes);
 router.use('/register', registerRoutes);
 router.use('/login', loginRoutes);
+router.use('/checkout', checkoutRoutes);
 
 export default router;
