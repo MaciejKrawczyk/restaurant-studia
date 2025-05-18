@@ -1,0 +1,6 @@
+extends layouts/main
+
+block content
+  h1 Payment Failed ❌
+  .alert.alert-danger= error
+  a.btn.btn-secondary.mt-3(href="/checkout") Try Again

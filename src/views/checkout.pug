@@ -1,0 +1,35 @@
+extends layouts/main
+
+block content
+  h1.mb-4 Checkout
+
+  if cart.length === 0
+    .alert.alert-info No items in cart to checkout.
+  else
+    .row
+      .col-md-8
+        each item in cart
+          .d-flex.justify-content-between.mb-2
+            span #{item.quantity}× #{item.name}
+            span $#{item.price * item.quantity}
+      .col-md-4
+        .card
+          .card-body
+            h5.card-title Order Total
+            p.lead $#{total}
+
+            form(method="POST", action="/checkout")
+
+              .mb-3
+                label.form-label Select payment method:
+                .form-check
+                  input#pm-card.form-check-input(type="radio", name="paymentMethod", value="card", checked)
+                  label.form-check-label(for="pm-card") Card
+                .form-check
+                  input#pm-blik.form-check-input(type="radio", name="paymentMethod", value="blik")
+                  label.form-check-label(for="pm-blik") BLIK
+                .form-check
+                  input#pm-paypal.form-check-input(type="radio", name="paymentMethod", value="paypal")
+                  label.form-check-label(for="pm-paypal") PayPal
+
+              button.btn.btn-success.w-100.mt-3(type="submit") Pay $#{total}

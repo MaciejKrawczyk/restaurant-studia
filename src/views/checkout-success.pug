@@ -1,0 +1,9 @@
+extends layouts/main
+
+block content
+  h1 Payment Successful 🎉
+  p Your transaction ID is
+    strong= transactionId
+  p Amount paid:
+    strong $#{amount}
+  a.btn.btn-primary.mt-3(href="/") Track your order
