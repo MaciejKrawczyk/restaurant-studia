@@ -1,0 +1,17 @@
+extends layouts/main
+
+block content
+  h1.mb-4 Płatność BLIK
+  form(method="POST", action="/checkout/complete")
+    input(type="hidden" name="method" value="blik")
+
+    .mb-3
+      label(for="blikCode") Wpisz 6-cyfrowy kod BLIK
+      input#blikCode.form-control(
+        type="text" name="blikCode" maxlength="6" required
+        value=(blikCode || '')
+      )
+      if error
+        .form-text.text-danger= error
+
+    button.btn.btn-success(type="submit") Pay $#{total}
