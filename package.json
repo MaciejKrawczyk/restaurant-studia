@@ -8,7 +8,7 @@
     "dev": "tsx watch src/index.ts",
     "prisma": "npx prisma generate && npx prisma migrate deploy && npx prisma db seed",
     "build": "tsc && npm run copy-views",
-    "copy-views": "copyfiles -u 1 src/views/**/*.pug dist/"
+    "copy-views": "cp -r src/views dist/views"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
