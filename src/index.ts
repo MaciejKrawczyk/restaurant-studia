@@ -2,7 +2,8 @@ import express from 'express';
 import session from 'express-session';
 import path from 'path';
 import routes from './routes';
-import prisma from "../prisma/client";
+import prisma from "./db/client";
+import 'dotenv/config'
 
 const app = express();
 

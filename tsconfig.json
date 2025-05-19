@@ -7,6 +7,7 @@
     "strict": true,
     "skipLibCheck": true,
     "outDir": "dist",
+    "rootDir": "src",
     "types": [
       "node",
       "express"
@@ -15,6 +16,7 @@
   "include": [
     "src",
     "src/**/*",
-    "src/types/express-session.d.ts"
+    "src/types/express-session.d.ts",
+    "src/**/*/*.pug"
   ]
 }

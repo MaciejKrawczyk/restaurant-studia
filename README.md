@@ -2,6 +2,7 @@
 1. Create file in root `.env` with content:
 ```
 DATABASE_URL="file:./dev.db"
+BASE_URL="/"
 ```
 
 2. ```npm install```

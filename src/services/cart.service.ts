@@ -1,5 +1,5 @@
 import {Request} from 'express';
-import prisma from "../../prisma/client";
+import prisma from "../db/client";
 import {CartItem} from "../types";
 
 

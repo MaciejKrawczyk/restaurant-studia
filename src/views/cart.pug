@@ -43,8 +43,8 @@ block content
                             strong Total:
                             strong $#{cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)}
                         if userId
-                            a.btn.btn-success.w-100.mt-3(href="/checkout") Proceed to Checkout
+                            a.btn.btn-success.w-100.mt-3(href="/p12/checkout") Proceed to Checkout
                         else
-                            a.btn.btn-primary.w-100.mt-3(href="/login") Log in before Checkout
+                            a.btn.btn-primary.w-100.mt-3(href="/p12/login") Log in before Checkout
                         form(method="POST", action="/cart/clear")
                             button.btn.btn-outline-secondary.w-100.mt-2(type="submit") Clear Cart
