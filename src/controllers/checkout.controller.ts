@@ -31,6 +31,7 @@ export const processCheckout = async (req: Request, res: Response) => {
   const cart   = cartService.getCart(req);
   const total  = calcTotal(cart);
   const method = req.body.method as 'card' | 'blik';
+  const restaurantId = cart.length > 0 ? cart[0].restaurantId : null;
 
   const rawUserId = req.session.userId!;
   const userId    = String(rawUserId);
@@ -55,7 +56,8 @@ export const processCheckout = async (req: Request, res: Response) => {
       cartService.clearCart(req);
       return res.render('checkout-success', {
         transactionId: result.transactionId,
-        amount:        total
+        amount:        total,
+        restaurantId: restaurantId
       });
     }
 
