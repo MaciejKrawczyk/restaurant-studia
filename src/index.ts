@@ -29,6 +29,16 @@ app.use((req, res, next) => {
     next();
 });
 
+// put this *before* your other routes
+app.use((req, res, next) => {
+    // already correct?  carry on.
+    if (req.originalUrl.startsWith('/p12') || req.originalUrl === '/') {
+        return next();
+    }
+    // otherwise send permanent redirect to the /p12-prefixed version
+    res.redirect(301, '/p12' + req.originalUrl);
+});
+
 // Routes
 app.use('/', routes);
 
