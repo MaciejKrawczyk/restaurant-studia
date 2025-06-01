@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { cartService } from '../services/cart.service';
 import { paymentService } from '../services/payment.service';
+import {createOrderFromCart} from "../services/order.service";
 
 function calcTotal(cart: Array<{ price: number; quantity: number }>) {
   return cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
@@ -53,11 +54,13 @@ export const processCheckout = async (req: Request, res: Response) => {
         });
 
     if (result.success) {
+      const newOrder = await createOrderFromCart(cart);
       cartService.clearCart(req);
       return res.render('checkout-success', {
         transactionId: result.transactionId,
         amount:        total,
-        restaurantId: restaurantId
+        restaurantId: restaurantId,
+        orderId: newOrder.id
       });
     }
 
