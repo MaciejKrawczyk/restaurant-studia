@@ -1,6 +1,6 @@
 import { Request } from 'express';
-import prisma from '../../prisma/client';
 import bcrypt from 'bcrypt';
+import prisma from "../db/client";
 
 export interface SessionUser {
   userId: number;

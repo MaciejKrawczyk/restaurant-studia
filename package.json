@@ -1,15 +1,18 @@
 {
+  "type": "commonjs",
   "name": "restaurant-studia",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "start": "node dist/index.js",
+    "build": "esbuild src/index.ts --bundle --platform=node --format=cjs --outfile=dist/index.js --external:bcrypt && npm run prisma",
     "dev": "tsx watch src/index.ts",
     "prisma": "npx prisma generate && npx prisma migrate deploy && npx prisma db seed"
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "ts-node prisma/seed.ts",
+    "schema": "src/db/schema.prisma"
   },
   "dependencies": {
     "@prisma/client": "^6.8.2",
@@ -25,6 +28,7 @@
     "@types/express": "^5.0.1",
     "@types/express-session": "^1.18.1",
     "@types/node": "^22.14.1",
+    "esbuild": "^0.25.5",
     "prisma": "^6.6.0",
     "tsx": "^4.19.3",
     "typescript": "^5.8.3"

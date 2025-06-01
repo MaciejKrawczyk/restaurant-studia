@@ -2,7 +2,7 @@ import express from 'express';
 import session from 'express-session';
 import path from 'path';
 import routes from './routes';
-import prisma from "../prisma/client";
+import prisma from "./db/client";
 
 const app = express();
 
@@ -15,7 +15,7 @@ app.use(session({
 }));
 
 // View engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'pug');
 
 // Middleware

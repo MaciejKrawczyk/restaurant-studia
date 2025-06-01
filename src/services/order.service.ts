@@ -1,4 +1,5 @@
-import prisma from "../../prisma/client";
+import prisma from "../db/client";
+
 
 export type CartItem = {
   dishId: number;
