@@ -19,7 +19,8 @@ app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'pug');
 
 // Middleware
-app.use(express.static(path.join(__dirname, '../public')));
+
+app.use('/p12', express.static(path.join(__dirname, '../public')));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
@@ -30,7 +31,7 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use('/', routes);
+app.use('/p12', routes);
 
 // Error handling
 app.use((req, res) => {

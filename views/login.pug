@@ -4,7 +4,7 @@ block content
   h1.mb-4 Login
   if error
     .alert.alert-danger= error
-  form(method="POST", action="/login")
+  form(method="POST", action="/p12/login")
     .form-group
       label(for="email") E-mail
       input#email.form-control(type="email", name="email", required)
@@ -15,4 +15,4 @@ block content
   .mt-2
     p
       | Don't have an account?
-      a(href="/register")   Register here
+      a(href="/p12/register")   Register here
