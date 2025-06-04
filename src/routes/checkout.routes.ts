@@ -1,6 +1,5 @@
-import { Router } from 'express';
-import {processCheckout, showPaymentForm} from '../controllers/checkout.controller';
-import {showCheckout} from "../controllers/checkout.controller";
+import {Router} from 'express';
+import {processCheckout, showCheckout, showPaymentForm} from '../controllers/checkout.controller';
 
 const router = Router();
 
