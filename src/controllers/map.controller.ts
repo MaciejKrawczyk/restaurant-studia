@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import prisma from '../../prisma/client';
+import prisma from "../db/client";
 
 export const showMap = async (req: Request, res: Response): Promise<void> => {
   const idParam = req.query.restaurantId as string | undefined;
