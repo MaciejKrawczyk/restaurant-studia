@@ -8,6 +8,10 @@ block content
     strong= transactionId
   p Amount paid:
     strong $#{amount}
+  p Download receipt:
+    a.btn.btn-primary.mt-3(
+      href=`${downloadUrl}`
+    ) Download
 
   if restaurantId
     a.btn.btn-primary.mt-3(
