@@ -88,7 +88,6 @@ export const generateFile = async (newOrder: Order & {
         // Grand total
         doc
         .fontSize(14)
-        .font("Helvetica-Bold")
         .text(
             `Total:   ${grandTotal.toFixed(2).replace(".", ",")} PLN`,
             {align: "right"}
