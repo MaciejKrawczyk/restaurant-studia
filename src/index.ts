@@ -20,7 +20,7 @@ app.set('view engine', 'pug');
 
 // Middleware
 
-app.use('/p12', express.static(path.join(__dirname, '../public')));
+app.use('/', express.static(path.join(__dirname, '../public')));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 

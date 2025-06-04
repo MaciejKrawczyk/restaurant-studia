@@ -10,11 +10,11 @@ import mapRoutes from "./map.routes";
 const router = Router();
 
 router.get('/', getHome);
-router.use('/p12/restaurant', restaurantRoutes);
-router.use('/p12/cart', cartRoutes);
-router.use('/p12/register', registerRoutes);
-router.use('/p12/login', loginRoutes);
-router.use('/p12/checkout', checkoutRoutes);
-router.use('/p12/map', mapRoutes);
+router.use('/restaurant', restaurantRoutes);
+router.use('/cart', cartRoutes);
+router.use('/register', registerRoutes);
+router.use('/login', loginRoutes);
+router.use('/checkout', checkoutRoutes);
+router.use('/map', mapRoutes);
 
 export default router;
