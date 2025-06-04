@@ -15,7 +15,7 @@ block content
                                 .text-end
                                     p.card-text $#{item.price * item.quantity}
                                         small (#{item.quantity} x $#{item.price})
-                            form(method="POST", action="/cart/update")
+                            form(method="POST", action="/p12/cart/update")
                                 input(type="hidden", name="dishId", value=item.dishId)
                                 input(type="hidden", name="restaurantId", value=item.restaurantId)
                                 .input-group.mb-3(style="width: 150px")
@@ -26,7 +26,7 @@ block content
                                         min="1"
                                     )
                                     button.btn.btn-outline-secondary(type="submit") Update
-                            form(method="POST", action="/cart/remove")
+                            form(method="POST", action="/p12/cart/remove")
                                 input(type="hidden", name="dishId", value=item.dishId)
                                 input(type="hidden", name="restaurantId", value=item.restaurantId)
                                 button.btn.btn-outline-danger.btn-sm(type="submit") Remove
@@ -43,8 +43,8 @@ block content
                             strong Total:
                             strong $#{cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)}
                         if userId
-                            a.btn.btn-success.w-100.mt-3(href="/checkout") Proceed to Checkout
+                            a.btn.btn-success.w-100.mt-3(href="/p12/checkout") Proceed to Checkout
                         else
-                            a.btn.btn-primary.w-100.mt-3(href="/login") Log in before Checkout
-                        form(method="POST", action="/cart/clear")
+                            a.btn.btn-primary.w-100.mt-3(href="/p12/login") Log in before Checkout
+                        form(method="POST", action="/p12/cart/clear")
                             button.btn.btn-outline-secondary.w-100.mt-2(type="submit") Clear Cart
