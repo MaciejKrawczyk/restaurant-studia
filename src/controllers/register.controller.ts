@@ -13,7 +13,7 @@ export const register = async (req: Request, res: Response) => {
 
     try {
         await authService.register(req, email, password);
-        res.redirect('/p12/login');
+        res.redirect('/login');
     } catch (err: any) {
         res.render('register', {error: err.message});
     }

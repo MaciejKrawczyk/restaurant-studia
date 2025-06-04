@@ -32,7 +32,7 @@ block content
                     p
                         i.fas.fa-map-marker-alt.me-2
                         | #{restaurant.latitude}, #{restaurant.longitude}
-                    a.btn.btn-success.w-100(href="/p12/cart") View Cart (#{cart ? cart.length : 0})
+                    a.btn.btn-success.w-100(href="/cart") View Cart (#{cart ? cart.length : 0})
 
                     script.
                         function addToCart(dishId, restaurantId) {
@@ -40,7 +40,7 @@ block content
                             btn.disabled = true;
                             btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...';
 
-                            fetch('/p12/cart/add', {
+                            fetch('/cart/add', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',

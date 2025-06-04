@@ -2,7 +2,7 @@ extends layouts/main
 
 block content
   h1.mb-4 Płatność kartą
-  form(method="POST", action="/p12/checkout/complete")
+  form(method="POST", action="/checkout/complete")
     input(type="hidden" name="method" value="card")
 
     .mb-3
