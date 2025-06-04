@@ -1,104 +1,120 @@
-import {Dish, Order, OrderItem, Restaurant} from "../db/generated";
 import path from "path";
-import fs from "node:fs";
-import PDFDocument from "pdfkit";
+import fs from "fs";
 
 const VAT_RATE = 0.23;
 
-export const generateFile = async (newOrder: Order & {
-    items: (OrderItem & {
-        dish: Dish;
-        restaurant: Restaurant;
-    })[];
-}) => {
+type PopulatedOrder = {
+    id: number;
+    createdAt: Date;
+    items: {
+        quantity: number;
+        dish: { name: string; price: number };
+        restaurant: { name: string };
+    }[];
+};
+
+export const generateFile = async (newOrder: PopulatedOrder) => {
     const ordersDir = path.join(process.cwd(), "public", "orders");
     if (!fs.existsSync(ordersDir)) {
         fs.mkdirSync(ordersDir, {recursive: true});
     }
 
-    const filename = `order_${newOrder.id}.pdf`;
+    const filename = `order_${newOrder.id}.html`;
     const filePath = path.join(ordersDir, filename);
 
-    await new Promise<void>((resolve, reject) => {
-        const doc = new PDFDocument({
-            size: "A4",
-            margins: {top: 50, bottom: 50, left: 50, right: 50},
-        });
-        const writeStream = fs.createWriteStream(filePath);
-        doc.pipe(writeStream);
+    const formatPLN = (value: number) =>
+        `${value.toFixed(2).replace(".", ",")} PLN`;
 
-        // === HEADER ===
-        doc.fontSize(20).text(`Order #${newOrder.id}`, {align: "center"});
-        doc.moveDown(0.5);
-        doc
-        .fontSize(12)
-        .text(
-            `Date: ${newOrder.createdAt.toLocaleString("pl-PL", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit",
-            })}`
-        );
-        doc.moveDown(1);
-
-        // === TABLE OF ITEMS ===
-        doc.fontSize(14).text("Items:", {underline: true});
-        doc.moveDown(0.5);
-
-        let subtotal = 0;
-
-        newOrder.items.forEach((item, idx) => {
-            const dishName = item.dish.name;
-            const restaurantName = item.restaurant.name;
-            const quantity = item.quantity;
-            const unitPrice = item.dish.price; // assume price is in same currency
-            const lineTotal = quantity * unitPrice;
-            subtotal += lineTotal;
-
-            const lineText = `${idx + 1}. ${dishName} (${restaurantName}) × ${quantity} = ${lineTotal
-            .toFixed(2)
-            .replace(".", ",")} PLN`;
-            doc.fontSize(12).text(lineText);
-        });
-
-        doc.moveDown(1);
-
-        // === PRICE SUMMARY ===
-        const vatAmount = subtotal * VAT_RATE;
-        const grandTotal = subtotal + vatAmount;
-
-        // Subtotal
-        doc
-        .fontSize(12)
-        .text(
-            `Subtotal:   ${subtotal.toFixed(2).replace(".", ",")} PLN`,
-            {align: "right"}
-        );
-        // VAT line
-        doc
-        .fontSize(12)
-        .text(
-            `VAT (${Math.round(VAT_RATE * 100)} %):   ${vatAmount
-            .toFixed(2)
-            .replace(".", ",")} PLN`,
-            {align: "right"}
-        );
-        // Grand total
-        doc
-        .fontSize(14)
-        .font("Helvetica-Bold")
-        .text(
-            `Total:   ${grandTotal.toFixed(2).replace(".", ",")} PLN`,
-            {align: "right"}
-        );
-
-        doc.end();
-
-        writeStream.on("finish", () => resolve());
-        writeStream.on("error", (err) => reject(err));
+    const createdAtPL = newOrder.createdAt.toLocaleString("pl-PL", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
     });
 
+    const subtotal = newOrder.items.reduce(
+        (sum, item) => sum + item.quantity * item.dish.price,
+        0,
+    );
+    const vatAmount = subtotal * VAT_RATE;
+    const grandTotal = subtotal + vatAmount;
+
+    const itemsRows = newOrder.items
+    .map(
+        (item, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td>${item.dish.name}</td>
+          <td>${item.restaurant.name}</td>
+          <td class="txt-right">${item.quantity}</td>
+          <td class="txt-right">${formatPLN(item.dish.price)}</td>
+          <td class="txt-right">${formatPLN(
+            item.quantity * item.dish.price,
+        )}</td>
+        </tr>`,
+    )
+    .join("");
+
+    const html = `
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <title>Zamówienie #${newOrder.id}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; font-family: "Lato", sans-serif; }
+    body { max-width: 720px; margin: 0 auto; padding: 40px 24px; color: #222; }
+    h1 { text-align: center; margin: 0 0 4px; }
+    h1 span { font-weight: normal; font-size: 0.6em; }
+    table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    th, td { padding: 8px 6px; border-bottom: 1px solid #ddd; }
+    th { text-align: left; background: #fafafa; }
+    .txt-right { text-align: right; }
+    .summary { margin-top: 24px; width: 100%; }
+    .summary td { padding: 4px 6px; }
+    .summary .label { width: 75%; }
+    .total { font-size: 1.2rem; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <h1>Order #${newOrder.id} <span>(${createdAtPL})</span></h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Dish</th>
+        <th>Restaurant</th>
+        <th class="txt-right">Qty</th>
+        <th class="txt-right">Unit&nbsp;Price</th>
+        <th class="txt-right">Line&nbsp;Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${itemsRows}
+    </tbody>
+  </table>
+
+  <table class="summary">
+    <tr>
+      <td class="label txt-right">Subtotal:</td>
+      <td class="txt-right">${formatPLN(subtotal)}</td>
+    </tr>
+    <tr>
+      <td class="label txt-right">VAT (${Math.round(VAT_RATE * 100)} %):</td>
+      <td class="txt-right">${formatPLN(vatAmount)}</td>
+    </tr>
+    <tr class="total">
+      <td class="label txt-right">Total:</td>
+      <td class="txt-right">${formatPLN(grandTotal)}</td>
+    </tr>
+  </table>
+</body>
+</html>
+`;
+
+    await fs.promises.writeFile(filePath, html, "utf8");
     return `/orders/${filename}`;
 };
