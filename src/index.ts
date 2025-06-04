@@ -31,7 +31,7 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use('/p12', routes);
+app.use('/', routes);
 
 // Error handling
 app.use((req, res) => {
