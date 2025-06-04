@@ -99,5 +99,5 @@ export const generateFile = async (newOrder: Order & {
         writeStream.on("error", (err) => reject(err));
     });
 
-    return `/orders/${filename}`;
+    return `/p12/orders/${filename}`;
 };
