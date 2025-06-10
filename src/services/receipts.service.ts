@@ -1,8 +1,6 @@
 import path from "path";
 import fs from "fs";
 
-const VAT_RATE = 0.23;
-
 type PopulatedOrder = {
     id: number;
     createdAt: Date;
@@ -16,7 +14,7 @@ type PopulatedOrder = {
 export const generateFile = async (newOrder: PopulatedOrder) => {
     const ordersDir = path.join(process.cwd(), "public", "orders");
     if (!fs.existsSync(ordersDir)) {
-        fs.mkdirSync(ordersDir, {recursive: true});
+        fs.mkdirSync(ordersDir, { recursive: true });
     }
 
     const filename = `order_${newOrder.id}.html`;
@@ -37,8 +35,7 @@ export const generateFile = async (newOrder: PopulatedOrder) => {
         (sum, item) => sum + item.quantity * item.dish.price,
         0,
     );
-    const vatAmount = subtotal * VAT_RATE;
-    const grandTotal = subtotal + vatAmount;
+    const grandTotal = subtotal;
 
     const itemsRows = newOrder.items
     .map(
@@ -99,14 +96,6 @@ export const generateFile = async (newOrder: PopulatedOrder) => {
 
   <table class="summary">
     <tr>
-      <td class="label txt-right">Subtotal:</td>
-      <td class="txt-right">${formatPLN(subtotal)}</td>
-    </tr>
-    <tr>
-      <td class="label txt-right">VAT (${Math.round(VAT_RATE * 100)} %):</td>
-      <td class="txt-right">${formatPLN(vatAmount)}</td>
-    </tr>
-    <tr class="total">
       <td class="label txt-right">Total:</td>
       <td class="txt-right">${formatPLN(grandTotal)}</td>
     </tr>
