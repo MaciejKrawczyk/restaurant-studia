@@ -103,7 +103,7 @@ export const generateFile = async (newOrder: PopulatedOrder) => {
 </body>
 </html>
 `;
-
+  
     await fs.promises.writeFile(filePath, html, "utf8");
-    return `/orders/${filename}`;
+    return `/p12/orders/${filename}`;
 };

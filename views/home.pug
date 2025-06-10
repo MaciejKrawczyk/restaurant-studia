@@ -6,7 +6,7 @@ block content
         each restaurant, index in restaurants
             .col-md-4.mb-4
                 .card.restaurant-card
-                    img.card-img-top(src=`/${index + 1}.jpg`, alt=restaurant.name)
+                    img.card-img-top(src=`/p12/${index + 1}.jpg`, alt=restaurant.name)
                     .card-body
                         h5.card-title= restaurant.name
-                        a.btn.btn-primary(href=`/restaurant/${restaurant.id}`) View Menu
+                        a.btn.btn-primary(href=`/p12/restaurant/${restaurant.id}`) View Menu
