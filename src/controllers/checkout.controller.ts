@@ -19,7 +19,7 @@ export const showPaymentForm = (req: Request, res: Response) => {
     const method = req.body.paymentMethod as 'card' | 'blik';
 
     if (!method || !['card', 'blik'].includes(method)) {
-        return res.redirect('/checkout');
+        return res.redirect('/p12/checkout');
     }
 
     res.render(

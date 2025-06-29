@@ -37,16 +37,16 @@ export const addToCart = async (req: Request, res: Response) => {
 export const removeFromCart = (req: Request, res: Response) => {
     const { dishId, restaurantId } = req.body;
     cartService.removeFromCart(req, parseInt(dishId), parseInt(restaurantId));
-    res.redirect('/cart');
+    res.redirect('/p12/cart');
 };
 
 export const updateCartItem = (req: Request, res: Response) => {
     const { dishId, restaurantId, quantity } = req.body;
     cartService.updateQuantity(req, parseInt(dishId), parseInt(restaurantId), parseInt(quantity));
-    res.redirect('/cart');
+    res.redirect('/p12/cart');
 };
 
 export const clearCart = (req: Request, res: Response) => {
     cartService.clearCart(req);
-    res.redirect('/cart');
+    res.redirect('/p12/cart');
 };
